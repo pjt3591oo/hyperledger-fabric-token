@@ -11,10 +11,6 @@ hyperledger-fabric-token
 └── README.md
 ```
 
-
-
-
-
 # 체인코드 개발
 
 
@@ -118,7 +114,7 @@ $ peer chaincode query -n token -c '{"Args":["get_receipt", "e445b62fafae008942a
 
 
 
->  [golang으로 작성된 코드 보러가기](https://github.com/pjt3591oo/go-token/blob/master/chaincode/token.go) 해당 코드는 leveldb를 적용하여 cli 형태로 실행 가능하도록 수정작업이 필요함
+>  [golang으로 작성된 코드 보러가기](https://github.com/pjt3591oo/go-token) 해당 코드는 leveldb를 적용하여 cli 형태로 실행 가능하도록 수정작업이 필요함
 
 
 
