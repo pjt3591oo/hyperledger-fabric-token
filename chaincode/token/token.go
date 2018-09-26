@@ -7,6 +7,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"encoding/json"
@@ -95,12 +96,12 @@ func (t *Token) Invoke(stub shim.ChaincodeStubInterface) peer.Response {
 		return t.get_root_receipt(stub, args)
 	} else if fn == "get_last_receipt" {
 		return t.get_last_receipt(stub, args)
-	} else if fn == "get_node_receipts" {
-		return t.get_node_receipts(stub, args)
 	} else if fn == "get_receipt" {
 		return t.get_receipt(stub, args)
 	} else if fn == "get_tx" {
 		return t.get_tx(stub, args)
+	} else if fn == "get_receipts" {
+		return t.get_receipts(stub, args)
 	}
 
 	// Return the result as success payload
@@ -359,8 +360,65 @@ func (t *Token) get_last_receipt(stub shim.ChaincodeStubInterface, args []string
 
 // 모든내역 가져오기
 // args[0] : address
-func (t *Token) get_node_receipts(stub shim.ChaincodeStubInterface, args []string) peer.Response {
-	return shim.Success(nil)
+func (t *Token) get_receipts(stub shim.ChaincodeStubInterface, args []string) peer.Response {
+
+	var receipts bytes.Buffer
+
+	RootReceiptAsBytes, _ := stub.GetState(ROOT_RECEIPT + args[0] + RECEIPT)
+	rootReceipt := RootReceipt{}
+	json.Unmarshal(RootReceiptAsBytes, &rootReceipt)
+
+	receiptAsBytes, _ := stub.GetState(NODE_RECEIPT + rootReceipt.ReceiptId + RECEIPT)
+	receipt := Receipt{}
+	json.Unmarshal(receiptAsBytes, &receipt)
+
+	receipts.WriteString("[")
+
+	bArrayMemberAlreadyWritten := false
+
+	for receipt.ReceiptId != "" {
+
+		if bArrayMemberAlreadyWritten == true {
+			receipts.WriteString(",")
+		}
+
+		receipts.WriteString("{\"ReceiptId\":")
+		receipts.WriteString("\"")
+		receipts.WriteString(receipt.ReceiptId)
+		receipts.WriteString("\"")
+
+		receipts.WriteString(", \"TxId\":")
+		receipts.WriteString("\"")
+		receipts.WriteString(receipt.TxId)
+		receipts.WriteString("\"")
+
+		receipts.WriteString(", \"NextReceiptId\":")
+		receipts.WriteString("\"")
+		receipts.WriteString(receipt.NextReceiptId)
+		receipts.WriteString("\"")
+
+		receipts.WriteString(", \"PrevReceiptId\":")
+		receipts.WriteString("\"")
+		receipts.WriteString(receipt.PrevReceiptId)
+		receipts.WriteString("\"")
+
+		receipts.WriteString(", \"Status\":")
+		receipts.WriteString("\"")
+		receipts.WriteString(receipt.Status)
+		receipts.WriteString("}")
+
+		if receipt.NextReceiptId == "" {
+			break
+		}
+
+		d, _ := stub.GetState(NODE_RECEIPT + receipt.NextReceiptId + RECEIPT)
+		receipt = Receipt{}
+		json.Unmarshal(d, &receipt)
+
+		bArrayMemberAlreadyWritten = true
+	}
+	receipts.WriteString("]")
+	return shim.Success(receipts.Bytes())
 }
 
 // 특정 receipt 정보 가져오기
@@ -374,7 +432,7 @@ func (t *Token) get_receipt(stub shim.ChaincodeStubInterface, args []string) pee
 	receipt, _ := stub.GetState(NODE_RECEIPT + receiptId + RECEIPT)
 
 	return shim.Success([]byte(receipt))
-	return shim.Success(nil)
+
 }
 
 func main() {
