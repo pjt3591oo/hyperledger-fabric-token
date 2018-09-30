@@ -1,0 +1,30 @@
+{
+    "orderer": {
+        "IP": "",
+        "PORT": "7050"
+    },
+    "CA.EXAMPLE.COM": {
+        "IP": "",
+        "PORT": "7054"
+    },
+    "PEER0.ORG1.EXAMPLE.COM": {
+        "IP": "",
+        "PORT": "7051"
+    },
+    "PEER1.ORG1.EXAMPLE.COM": {
+        "IP": "",
+        "PORT": "7051"
+    },
+    "PEER0.ORG2.EXAMPLE.COM": {
+        "IP": "",
+        "PORT": "7051"
+    },
+    "PEER1.ORG2.EXAMPLE.COM": {
+        "IP": "",
+        "PORT": "7051"
+    },
+    "COUCHDB": {
+        "IP": "",
+        "PORT": ""
+    }
+}
