@@ -12,11 +12,11 @@ router.get('/', async (req, res) => {
     } = req.query
 
     let fcn = "get_account"
-    let args = [address]
+    let args = [address, alloc]
 
     if (!address) {
         return res.status(404).json({msg: "address가 비었습니다."})
-    }
+    } 
 
     try {
         let data = await query({fcn: fcn, args: args})
@@ -31,7 +31,8 @@ router.get('/', async (req, res) => {
 // 계정 생성
 router.post('/', async (req, res) => {
     let {
-        key
+        key,
+        alloc
     } = req.body
 
     let fcn = "create_account"
@@ -39,7 +40,9 @@ router.post('/', async (req, res) => {
 
     if (!key) {
         return res.status(404).json({msg: "key가 비었습니다."})
-    }
+    } 
+
+    alloc = alloc || 0
 
     try {
         let data = await invoke({fcn: fcn, args: args}) // 정상적으로 생성되면 account 반환

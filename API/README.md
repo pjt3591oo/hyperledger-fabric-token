@@ -40,9 +40,12 @@ http://IP:3000/api/v1.0/chaincode
 
 ```json
 {
-    "key" : ""
+    "key" : "",
+    "alloc" : 0
 }
 ```
+
+alloc은 어카운트 생성시 토큰 할당량 비어있다면 0으로 할당.
 
 * response
 
