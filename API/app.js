@@ -39,20 +39,4 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
-setInterval(async () => {
-  let data = await query({key: 'test-3'})
-  let a = await invoke({
-    key: "test-3",
-    projId: "3",
-    store: "test",
-    entrprsMberId: "entrprsMberId",
-    itemScore1: "itemScore1",
-    itemScore2: "itemScore2",
-    itemScore3: "itemScore3",
-    sumScore: "sumScore",
-    negoRank: "negoRank"
-  })
-  console.log(`time: ${new Date()}, data: ${data}`)
-}, 10000)
-
 module.exports = app;

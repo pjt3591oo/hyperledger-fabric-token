@@ -1,18 +1,18 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router(); 
 
 
-var query = require('../../../utils/query')
+var query = require('../../../utils/query') 
 var invoke = require('../../../utils/invoke')
 
-// 특정계정 조회
+// 특정계정 조회               
 router.get('/', async (req, res) => {
-    let { 
-        address
-    } = req.query
-
+    let {                      
+        address                
+    } = req.query              
+    
     let fcn = "get_account"
-    let args = [address, alloc]
+    let args = [address]       
 
     if (!address) {
         return res.status(404).json({msg: "address가 비었습니다."})
@@ -20,8 +20,8 @@ router.get('/', async (req, res) => {
 
     try {
         let data = await query({fcn: fcn, args: args})
-        return res.status(200).json(data)
-    } catch(err) {
+        return res.status(200).json(JSON.parse(data))
+    } catch(err) {             
         return res.status(500).json({msg: `${address} 조회중 문제발생`, err: err})
     }
 
@@ -29,14 +29,16 @@ router.get('/', async (req, res) => {
   
 
 // 계정 생성
-router.post('/', async (req, res) => {
+router.post('/', async(req, res) => {
     let {
         key,
         alloc
     } = req.body
 
+    console.log(key, alloc)
+
     let fcn = "create_account"
-    let args = [address]
+    let args = [key, alloc]
 
     if (!key) {
         return res.status(404).json({msg: "key가 비었습니다."})
@@ -45,15 +47,13 @@ router.post('/', async (req, res) => {
     alloc = alloc || 0
 
     try {
-        let data = await invoke({fcn: fcn, args: args}) // 정상적으로 생성되면 account 반환
-        
-        // TODO: 계정이 이미 존재해서 만들어진 유무 확인
-        return res.status(201).json(data)
+        let createdAddress = await invoke({fcn: fcn, args: args}) // 정상적으로 생성되면 account 반환
+        return res.status(201).json({Address: createdAddress})
 
     } catch(err) {
-        return res.status(500).json({msg: `${address} 생성중 문제발생`, err: err})
+        // 이미 계정이 존재한다면 에러처리가 된다
+        return res.status(500).json({msg: `address 생성중 문제발생(사용키: ${key})`, err: err}) 
     }
 })
 
 module.exports = router;
-
