@@ -8,11 +8,29 @@ hyperledger-fabric-token
 │ ├── docker-compose-simple.yaml
 │ └── . . . 생 략 . . .
 ├── API/
+├── network/
 └── README.md
 ```
 
-# 체인코드 개발
+* chaincode
 
+체인코드 파일이 저장되는 디렉터리 입니다. 해당 프로젝트는 go를 사용하여 체인코드 개발합니다.
+
+* chaincode-docker-devmode
+
+체인코드 개발가능한 환경을 배포하는 디렉터리입니다.
+
+API와 연동하기 위해서는 개발 모드를 사용하면 안됩니다.
+
+* API
+
+배포된 체인코드를 연동한 서버측 코드입니다. 해당 서버는 chaincode-docker-devmode로 배포된 환경으로는 연결할 수 없습니다.
+
+* network
+
+peer 2개, ca 1개, orderer 1개의 노드로 구성된 네트워크를 생성합니다. 여기서 네트워크가 생성되면 API와 연동가능 합니다.
+
+# 체인코드 개발
 
 
 * network up (첫 번째 터미널)
