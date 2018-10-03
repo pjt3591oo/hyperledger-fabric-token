@@ -17,9 +17,9 @@ var fabric_client = new Fabric_Client();
 
 // setup the fabric network
 var channel = fabric_client.newChannel('ydp');
-var peer = fabric_client.newPeer('grpc://52.231.155.183:7051');
+var peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
 channel.addPeer(peer);
-var order = fabric_client.newOrderer('grpc://52.231.153.50:7050')
+var order = fabric_client.newOrderer('grpc://127.0.0.1:7050')
 channel.addOrderer(order);
 console.log(channel)
 //
@@ -104,7 +104,7 @@ function invoke ({
                 promises.push(sendPromise); //we want the send transaction first, so that we know where to check status
 
                 let event_hub = fabric_client.newEventHub();
-                event_hub.setPeerAddr('grpc://52.231.155.183:7053');
+                event_hub.setPeerAddr('grpc://127.0.0.1:7053');
 
                 return Promise.all(promises);
             } else {
