@@ -222,10 +222,15 @@ func (t *Token) transfer(stub shim.ChaincodeStubInterface, args []string) peer.R
 	toAddress := &Account{}
 	json.Unmarshal([]byte(toInfo), &toAddress)
 
-	// 1.2 to account value 확인
-	if toAddress.Value < value {
+	// 1.2 from account value 확인
+	if fromAddress.Value < value {
 		return shim.Error("잔액부족")
 	}
+
+	if fromAddress.Value-value < 0 {
+		return shim.Error("잔액부족")
+	}
+
 	fromAddress.Value -= value // 보내는 사람 차감
 	toAddress.Value += value   // 받는사람 증가
 
@@ -405,6 +410,7 @@ func (t *Token) get_receipts(stub shim.ChaincodeStubInterface, args []string) pe
 		receipts.WriteString(", \"Status\":")
 		receipts.WriteString("\"")
 		receipts.WriteString(receipt.Status)
+		receipts.WriteString("\"")
 		receipts.WriteString("}")
 
 		if receipt.NextReceiptId == "" {
