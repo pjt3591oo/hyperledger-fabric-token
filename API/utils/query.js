@@ -70,7 +70,6 @@ async function query({
             // send the query proposal to the peer
             return channel.queryByChaincode(request);
         }).then((query_responses) => {
-            console.log('tt===========')
             console.log("Query has completed, checking results");
             console.log(query_responses[0])
             // query_responses could have more than one  results if there multiple peers were used as targets
