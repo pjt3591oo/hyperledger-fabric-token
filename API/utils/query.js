@@ -18,8 +18,8 @@ var fabric_client = new Fabric_Client();
 
 // // setup the fabric network
 var channel = fabric_client.newChannel('ydp');
-var peer = fabric_client.newPeer('grpc://52.231.155.183:7051');
-// var peer = fabric_client.newPeer('grpc://52.231.155.183:8051');
+var peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
+// var peer = fabric_client.newPeer('grpc://127.0.0.1:8051');
 channel.addPeer(peer);
 // channel.addPeer(peer1);
 
