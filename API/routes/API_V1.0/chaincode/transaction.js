@@ -24,23 +24,18 @@ router.post('/', async(req, res) => {
     let fcn = "transfer"
     let args = [from, to, value]
 
-	invoke({fcn: fcn, args: args}, (err, result) => {
-		if (err) {
-			return res.status(500).json({msg: `토큰전송 중 문제발생`, err: result})
-		}	
-		
-		return res.status(201).json(JSON.parse(result))
-	})
-
-	/*
     try {
-        let transferId = await invoke({fcn: fcn, args: args}) // 전송이 됬으면 txId 반환, 해당 txId는 체인코드에서 임으로 만든 txId임.
-		console.log(transferId)
-        return res.status(201).json(JSON.parse(transferId))
+        let {code, data} = await invoke({fcn: fcn, args: args}) // 전송이 됬으면 txId 반환, 해당 txId는 체인코드에서 임으로 만든 txId임.
+		
+		if (code == 201) {
+			return res.status(201).json(JSON.parse(data))
+		} else if (code == 500) {
+			return res.status(500).json({msg: "토큰 전송중 문제발생", err: data})
+		}
     } catch (err) {
-        return res.status(500).json({msg: "토큰 전송중 문제발생", err: err})
+		let {code, data} = err
+        return res.status(500).json({msg: "토큰 전송중 문제발생", err: data})
     }
-	*/
 });
   
 // 토큰전송 내역 조회

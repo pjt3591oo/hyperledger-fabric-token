@@ -39,4 +39,14 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+setInterval(async () => {
+  let searchData= await query({fcn: "get_account", args: ["227490b3c5f6226d6732cf836505e8abe22eadf2d4e407fff9dbafa66d145226"]})
+  let {code, data} = await invoke({fcn: "create_account", args: ["test44141414165", "1234"]})
+  // console.log('======query result=======')
+  // console.log(`time: ${new Date()}, data: ${JSON.stringify(searchData)}`)
+
+  // console.log('======invoke result=======')
+  // console.log(`time: ${new Date()}, data: ${data}`)
+}, 10000)
+
 module.exports = app;
