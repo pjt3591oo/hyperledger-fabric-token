@@ -134,10 +134,8 @@ $ peer chaincode query -n token -c '{"Args":["get_tx", "91df96c07dd8ff65240ff47e
 2. 모듈화
 
 3. 샘플 API 코드를 추가한다
-  
-    3.1 API 코드
 
-    3.2 샘플 요청파일(vs code REST client 플러그인에서 동작되는 파일: [사용법 알아보러 GoGo~](https://blog.naver.com/pjt3591oo/221346544567))
+    3.1 샘플 요청파일(vs code REST client 플러그인에서 동작되는 파일: [사용법 알아보러 GoGo~](https://blog.naver.com/pjt3591oo/221346544567))
 
 
 
