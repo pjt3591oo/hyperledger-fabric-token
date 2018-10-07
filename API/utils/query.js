@@ -22,15 +22,15 @@ var store_path = path.join(__dirname, '../hfc-key-store');
 console.log('Store path:'+store_path);
 var tx_id = null;
 
-fabric_client = new Fabric_Client();
-channel = fabric_client.newChannel('ydp');
-peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
-channel.addPeer(peer);
-
 async function query({
 	fcn,
 	args
 }){
+
+	fabric_client = new Fabric_Client();
+	channel = fabric_client.newChannel('ydp');
+	peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
+	channel.addPeer(peer);
 
 	return new Promise((resolve, reject) => {
 

@@ -25,17 +25,17 @@ var store_path = path.join(__dirname, '../hfc-key-store');
 console.log('Store path:'+store_path);
 var tx_id;
 
-fabric_client = new Fabric_Client()
-channel = fabric_client.newChannel('ydp');
-peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
-channel.addPeer(peer);
-order = fabric_client.newOrderer('grpc://127.0.0.1:7050')
-channel.addOrderer(order);
-
 async function invoke ({
 	fcn,
 	args
 }) {
+
+	fabric_client = new Fabric_Client()
+	channel = fabric_client.newChannel('ydp');
+	peer = fabric_client.newPeer('grpc://127.0.0.1:7051');
+	channel.addPeer(peer);
+	order = fabric_client.newOrderer('grpc://127.0.0.1:7050')
+	channel.addOrderer(order);
 
 	let data;	
 
@@ -104,38 +104,38 @@ async function invoke ({
 			var sendPromise = channel.sendTransaction(request);
 			promises.push(sendPromise); //we want the send transaction first, so that we know where to check status
 	
-			let event_hub = channel.newChannelEventHub(peer);
+			// let event_hub = channel.newChannelEventHub(peer);
 	
-			let txPromise = new Promise((resolve, reject) => {
-				let handle = setTimeout(() => {
-					event_hub.unregisterTxEvent(transaction_id_string);
-					event_hub.disconnect();
-					resolve('TIMEOUT'); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
-				}, 3000);
-				event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
-					// this is the callback for transaction event status
-					// first some clean up of event listener
-					clearTimeout(handle);
+			// let txPromise = new Promise((resolve, reject) => {
+			// 	let handle = setTimeout(() => {
+			// 		event_hub.unregisterTxEvent(transaction_id_string);
+			// 		event_hub.disconnect();
+			// 		resolve('TIMEOUT'); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
+			// 	}, 3000);
+			// 	event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
+			// 		// this is the callback for transaction event status
+			// 		// first some clean up of event listener
+			// 		clearTimeout(handle);
 	
-					// now let the application know what happened
-					var return_status = {event_status : code, tx_id : transaction_id_string};
-					if (code !== 'VALID') {
-						console.error('The transaction was invalid, code = ' + code);
-						resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
-					} else {
-						console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
-						resolve(return_status);
-					}
-				}, (err) => {
-					//this is the callback if something goes wrong with the event registration or processing
-					reject(new Error('There was a problem with the eventhub ::'+err));
-				},
-					{disconnect: true} //disconnect when complete
-				);
-				event_hub.connect();
+			// 		// now let the application know what happened
+			// 		var return_status = {event_status : code, tx_id : transaction_id_string};
+			// 		if (code !== 'VALID') {
+			// 			console.error('The transaction was invalid, code = ' + code);
+			// 			resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
+			// 		} else {
+			// 			console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
+			// 			resolve(return_status);
+			// 		}
+			// 	}, (err) => {
+			// 		//this is the callback if something goes wrong with the event registration or processing
+			// 		reject(new Error('There was a problem with the eventhub ::'+err));
+			// 	},
+			// 		{disconnect: true} //disconnect when complete
+			// 	);
+			// 	event_hub.connect();
 
-			});
-			promises.push(txPromise);
+			// });
+			// promises.push(txPromise);
 
 			return Promise.all(promises);
 		} else {
